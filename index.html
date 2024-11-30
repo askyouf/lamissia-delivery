@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доставка - Lamissia Cafe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/delivery.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Подключаем API Яндекс.Карт -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=e0e72e4c-7d76-4730-9094-c6e70f3b3892&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Хедер такой же как на главной -->
+        <header class="header">
+            <div class="wrapper">
+                <!-- header include -->
+                <header class="header">
+                  <div class="container">
+                    <div class="header__inner">
+                      <div class="header__main">
+                        <h1 class="logo header__logo">LAMISSIA CAFE</h1>
+          
+                        <div class="header__main-info">
+                          <div class="header__working-hours">10:00-23:00</div>
+          
+                          <ul class="socials">
+                            <li>
+                              <a href="https://t.me/lamissiacafe" target="_blank">
+                                <img src="img/icons/tg.png" alt="Telegram" />
+                              </a>
+                            </li>
+                            <li>
+                              <a href="https://vk.com/lamissia.cafe" target="_blank">
+                                <img src="img/icons/vk.png" alt="VK" />
+                              </a>
+                            </li>
+                          </ul>                
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        </header>
+
+        <main class="delivery-page">
+            <div class="container">
+                <h1 class="delivery-title">Оформление доставки</h1>
+                
+                <div class="delivery-content">
+                    <!-- Левая колонка с формой -->
+                    <div class="delivery-form">
+                        <form id="deliveryForm">
+                            <div class="form-section">
+                                <h3>Адрес доставки</h3>
+                                <div class="delivery-info">
+                                    <p class="delivery-zone-info">
+                                        <i class="fas fa-info-circle"></i>
+                                        Доставка осуществляется только в пределах ЖК
+                                    </p>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="address" name="address" placeholder="Введите адрес или выберите на карте" required>
+                                </div>
+                                <div id="map" class="delivery-map"></div>
+                            </div>
+
+                            <div class="form-section delivery-method-section">
+                                <h3>Способ получения заказа</h3>
+                                <div class="delivery-methods">
+                                    <label class="method-option active">
+                                        <input type="radio" name="deliveryMethod" value="delivery" checked>
+                                        <span class="method-icon">
+                                            <i class="fas fa-motorcycle"></i>
+                                        </span>
+                                        <span class="method-text">
+                                            <span class="method-title">Доставка</span>
+                                            <span class="method-desc">30-45 минут</span>
+                                        </span>
+                                    </label>
+                                    <label class="method-option">
+                                        <input type="radio" name="deliveryMethod" value="pickup">
+                                        <span class="method-icon">
+                                            <i class="fas fa-store"></i>
+                                        </span>
+                                        <span class="method-text">
+                                            <span class="method-title">Самовывоз</span>
+                                            <span class="method-desc">из ресторана</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-section contact-info-section">
+                                <h3>Контактные данные</h3>
+                                <div class="form-group">
+                                    <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required pattern="[+]7 [(][0-9]{3}[)] [0-9]{3}-[0-9]{2}-[0-9]{2}">
+                                </div>
+                            </div>
+
+                            <div class="form-section delivery-time-section">
+                                <h3>Время доставки</h3>
+                                <div class="delivery-time-options">
+                                    <label class="time-option active">
+                                        <input type="radio" name="deliveryTimeOption" value="asap" checked>
+                                        <span class="time-option-content">
+                                            <span class="time-icon">
+                                                <i class="fas fa-bolt"></i>
+                                            </span>
+                                            <span class="time-details">
+                                                <span class="time-title">Как можно скорее</span>
+                                                <span class="time-estimate">Примерное время: 30-45 мин</span>
+                                            </span>
+                                        </span>
+                                    </label>
+                                    
+                                    <label class="time-option">
+                                        <input type="radio" name="deliveryTimeOption" value="scheduled">
+                                        <span class="time-option-content">
+                                            <span class="time-icon">
+                                                <i class="fas fa-clock"></i>
+                                            </span>
+                                            <span class="time-details">
+                                                <span class="time-title">Выбрать время</span>
+                                                <span class="time-estimate">Доставка в удобное время</span>
+                                            </span>
+                                        </span>
+                                    </label>
+
+                                    <div class="scheduled-time-wrapper hidden">
+                                        <div class="date-time-inputs">
+                                            <div class="date-select">
+                                                <label for="deliveryDate">Дата</label>
+                                                <input type="date" id="deliveryDate" name="deliveryDate" min="">
+                                            </div>
+                                            <div class="time-select">
+                                                <label for="deliveryTime">Время</label>
+                                                <select id="deliveryTime" name="deliveryTime">
+                                                    <option value="" disabled selected>Выберите время</option>
+                                                    <option value="10:00">10:00 - 10:30</option>
+                                                    <option value="10:30">10:30 - 11:00</option>
+                                                    <option value="11:00">11:00 - 11:30</option>
+                                                    <option value="11:30">11:30 - 12:00</option>
+                                                    <option value="12:00">12:00 - 12:30</option>
+                                                    <option value="12:30">12:30 - 13:00</option>
+                                                    <option value="13:00">13:00 - 13:30</option>
+                                                    <option value="13:30">13:30 - 14:00</option>
+                                                    <option value="14:00">14:00 - 14:30</option>
+                                                    <option value="14:30">14:30 - 15:00</option>
+                                                    <option value="15:00">15:00 - 15:30</option>
+                                                    <option value="15:30">15:30 - 16:00</option>
+                                                    <option value="16:00">16:00 - 16:30</option>
+                                                    <option value="16:30">16:30 - 17:00</option>
+                                                    <option value="17:00">17:00 - 17:30</option>
+                                                    <option value="17:30">17:30 - 18:00</option>
+                                                    <option value="18:00">18:00 - 18:30</option>
+                                                    <option value="18:30">18:30 - 19:00</option>
+                                                    <option value="19:00">19:00 - 19:30</option>
+                                                    <option value="19:30">19:30 - 20:00</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section payment-section">
+                                <h3>Способ оплаты</h3>
+                                <div class="payment-options">
+                                    <!-- Способы оплаты для доставки -->
+                                    <label class="payment-option delivery-only">
+                                        <input type="radio" name="payment" value="cash">
+                                        <span class="payment-icon">
+                                            <i class="fas fa-money-bill"></i>
+                                        </span>
+                                        <span class="payment-text">
+                                            <span class="payment-title">Наличными курьеру</span>
+                                            <span class="payment-desc">Оплата при получении</span>
+                                        </span>
+                                    </label>
+                                    <label class="payment-option delivery-only">
+                                        <input type="radio" name="payment" value="card_courier">
+                                        <span class="payment-icon">
+                                            <i class="fas fa-credit-card"></i>
+                                        </span>
+                                        <span class="payment-text">
+                                            <span class="payment-title">Картой курьеру</span>
+                                            <span class="payment-desc">Оплата при получении</span>
+                                        </span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment" value="card_online" checked>
+                                        <span class="payment-icon">
+                                            <i class="fas fa-credit-card"></i>
+                                        </span>
+                                        <span class="payment-text">
+                                            <span class="payment-title">Картой онлайн</span>
+                                            <span class="payment-desc">Visa, Mastercard, МИР</span>
+                                        </span>
+                                    </label>
+                                    <label class="payment-option pickup-only">
+                                        <input type="radio" name="payment" value="restaurant">
+                                        <span class="payment-icon">
+                                            <i class="fas fa-store"></i>
+                                        </span>
+                                        <span class="payment-text">
+                                            <span class="payment-title">Оплата в заведении</span>
+                                            <span class="payment-desc">Наличными или картой</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-section comment-section">
+                                <h3>Комментарий к заказу</h3>
+                                <div class="comment-wrapper">
+                                    <textarea id="comment" name="comment" placeholder="Напишите, если у вас есть особые пожелания к заказу или доставке" maxlength="200"></textarea>
+                                    <div class="comment-counter">
+                                        <span id="commentLength">0</span>/200
+                                    </div>
+                                    <div class="comment-suggestions">
+                                        <button type="button" class="suggestion-btn" data-comment="Позвоните мне за 5 минут до прибытия">Позвоните мне за 5 минут до прибытия</button>
+                                        <button type="button" class="suggestion-btn" data-comment="Оставьте у двери, домофон не работает">Оставьте у двери, домофон не работает</button>
+                                        <button type="button" class="suggestion-btn" data-comment="Без звонка, домофон работает">Без звонка, домофон работает</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section submit-section">
+                                <button type="submit" class="submit-button" id="submitOrder">Подтвердить заказ</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Правая колонка с информацией о заказе -->
+                    <div class="order-summary">
+                        <div class="summary-header">
+                            <h3>Ваш заказ</h3>
+                            <span class="items-count">3 товара</span>
+                        </div>
+                        <div class="cart-items">
+                            <div class="cart-item">
+                                <div class="item-image">
+                                    <img src="img/product1.jpg" alt="Блюдо 1">
+                                </div>
+                                <div class="item-info">
+                                    <h4 class="item-title">Название блюда 1</h4>
+                                    <div class="item-details">
+                                        <div class="item-quantity">
+                                            <button class="quantity-btn minus">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <span class="quantity">2</span>
+                                            <button class="quantity-btn plus">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span class="item-price">1200 ₽</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Повторите для других товаров -->
+                        </div>
+                        <div class="order-totals">
+                            <div class="subtotal">
+                                <span>Сумма заказа</span>
+                                <span>3600 ₽</span>
+                            </div>
+                            <div class="delivery-cost">
+                                <span>Доставка</span>
+                                <span>200 ₽</span>
+                            </div>
+                            <div class="total">
+                                <span>Итого</span>
+                                <span>3800 ₽</span>
+                            </div>
+                        </div>
+                        <button class="checkout-btn">
+                            <span>Оформить заказ</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <!-- Содержимое футера -->
+        </footer>
+    </div>
+
+    <script src="js/delivery.js"></script>
+</body>
+</html>
